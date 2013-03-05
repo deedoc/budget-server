@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ru.pomeshikov.model.User;
-
+/**/
 @Controller
 @RequestMapping("/hello")
 public class Hello {
