@@ -2,6 +2,7 @@ package ru.pomeshikov.dao;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.pomeshikov.BaseTest;
@@ -14,8 +15,12 @@ public class UserDaoTest extends BaseTest {
 
 	@Test
 	@Transactional
+	@Rollback
 	public void test() {
-		userDao.add(new User());
+		User user = new User();
+		user.setEmail("test");
+		user.setPassword("testPwd");
+		userDao.add(user);
 	}
 
 }
