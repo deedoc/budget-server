@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Entity
 @Table(name="User")
@@ -23,5 +22,8 @@ public class User {
 	
 	@Column(name="password")
 	private String password;
+	
+	@Column(name="ukey")
+	private String ukey;
 	
 }

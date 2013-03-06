@@ -1,6 +1,7 @@
 package ru.pomeshikov.dao;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class UserDao {
 		sessionFactory.getCurrentSession().save(user);
 	}
 	
-	public User findByEmail(String email){
-		return (User) sessionFactory.getCurrentSession().find("from User").get(0);
+	public User findByUkey(String ukey){
+		return (User) sessionFactory.getCurrentSession().createCriteria(User.class).add(Restrictions.eq("ukey", ukey)).list().get(0);
 	}
 }
