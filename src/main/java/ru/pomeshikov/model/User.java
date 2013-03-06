@@ -6,8 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.Getter;
+
 @Entity
 @Table(name="User")
+@Data
 public class User {
 	
 	@Id

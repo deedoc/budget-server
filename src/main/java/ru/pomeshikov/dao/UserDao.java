@@ -14,4 +14,8 @@ public class UserDao {
 	public void add(User user){
 		sessionFactory.getCurrentSession().save(user);
 	}
+	
+	public User findByEmail(String email){
+		return (User) sessionFactory.getCurrentSession().find("from User").get(0);
+	}
 }
