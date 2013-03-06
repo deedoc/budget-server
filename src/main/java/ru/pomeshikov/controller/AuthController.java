@@ -2,6 +2,7 @@ package ru.pomeshikov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import ru.pomeshikov.dao.UserDao;
@@ -13,6 +14,7 @@ public class AuthController {
 	@Autowired
 	private UserDao userDao;
 
+	@Transactional
 	public String register(User user) {
 		user.setPassword(toMD5(user.getPassword()));
 		user.setUkey(toMD5(user.getEmail() + ":" + user.getPassword()));
@@ -20,12 +22,9 @@ public class AuthController {
 		return user.getUkey();
 	}
 
+	@Transactional
 	public String login(User user) {
-		/**
-		 * Тут зафигачить поиск по имейлу и хэшу пароля
-		 * и вернуть юкей
-		 */
-		return null;
+		return userDao.findByEmailAndPassword(user.getEmail(), toMD5(user.getPassword())).getUkey();
 	}
 	
 	private String toMD5(String s){
