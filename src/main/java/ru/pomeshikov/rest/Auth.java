@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ru.pomeshikov.controller.AuthController;
-import ru.pomeshikov.model.User;
+import ru.pomeshikov.model.UserDO;
 
 @Service
 @RequestMapping("/auth")
@@ -18,12 +18,12 @@ public class Auth {
 	AuthController authController;
 	
 	@RequestMapping(value="register", method=RequestMethod.POST)
-	public @ResponseBody String register(@RequestBody User user){
+	public @ResponseBody String register(@RequestBody UserDO user){
 		return authController.register(user);
 	}
 	
 	@RequestMapping(value="login", method=RequestMethod.POST)
-	public @ResponseBody String login(@RequestBody User user){
+	public @ResponseBody String login(@RequestBody UserDO user){
 		return authController.login(user);
 	}
 }

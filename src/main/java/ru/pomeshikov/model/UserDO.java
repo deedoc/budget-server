@@ -1,9 +1,14 @@
 package ru.pomeshikov.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -11,7 +16,7 @@ import lombok.Data;
 @Entity
 @Table(name="User")
 @Data
-public class User {
+public class UserDO {
 	
 	@Id
 	@GeneratedValue
@@ -25,5 +30,8 @@ public class User {
 	
 	@Column(name="ukey")
 	private String ukey;
+	
+	@OneToMany(fetch= FetchType.LAZY, mappedBy="user", cascade=CascadeType.ALL)
+	private List<TransactionDO> transactions;
 	
 }

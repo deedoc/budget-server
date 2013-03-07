@@ -5,6 +5,7 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<mapping class="ru.pomeshikov.model.User" />
+		<mapping class="ru.pomeshikov.model.UserDO" />
+		<mapping class="ru.pomeshikov.model.TransactionDO" />
 	</session-factory>
 </hibernate-configuration>
