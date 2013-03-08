@@ -23,7 +23,7 @@ public class TransactionDO {
 	@Column(name="ukey")
 	private String ukey;
 	
-	@Column(name="date")
+	@Column(name="date", columnDefinition="date")
 	private Date date;
 	
 	@Column(name="name")
