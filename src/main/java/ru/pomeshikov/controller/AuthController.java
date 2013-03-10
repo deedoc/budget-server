@@ -18,7 +18,7 @@ public class AuthController {
 	public String register(UserDO user) {
 		user.setPassword(toMD5(user.getPassword()));
 		user.setUkey(toMD5(user.getEmail() + ":" + user.getPassword()));
-		userDao.add(user);
+		userDao.save(user);
 		return user.getUkey();
 	}
 

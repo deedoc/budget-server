@@ -23,7 +23,7 @@ public class UserDaoTest extends BaseTest {
 		u.setUkey("key123321yek");
 		u.setEmail("t-email");
 		u.setPassword("t-password");
-		userDao.add(u);
+		userDao.save(u);
 		
 		UserDO foundUser = userDao.findByUkey("key123321yek");
 		Assert.assertEquals("key123321yek", foundUser.getUkey());
@@ -39,7 +39,7 @@ public class UserDaoTest extends BaseTest {
 		user.setEmail("test");
 		user.setPassword("testPwd");
 		user.setUkey("kkk");
-		userDao.add(user);
+		userDao.save(user);
 	}
 
 }

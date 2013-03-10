@@ -2,6 +2,7 @@ package ru.pomeshikov.dao;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -39,7 +40,11 @@ public class TransactionDaoTest extends BaseTest {
 		
 		dao.save(t);
 		
-		Assert.assertEquals(2, dao.findByDate("ukey", new Date()).size());
+		List<TransactionDO> findByDate = dao.findByDate("ukey", new Date());
+		
+		Assert.assertEquals(2, findByDate.size());
+		Assert.assertEquals(BigDecimal.ONE, findByDate.get(0).getValue());
+		Assert.assertEquals(BigDecimal.TEN, findByDate.get(1).getValue());
 		
 	}
 

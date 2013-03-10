@@ -12,7 +12,7 @@ public class UserDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	public void add(UserDO user){
+	public void save(UserDO user){
 		sessionFactory.getCurrentSession().save(user);
 	}
 	
