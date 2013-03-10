@@ -15,12 +15,18 @@ function Day(parentCalendar){
 	this.detailsVisible = ko.observable(false);
 	this.toggleDetailsVisibility = function(){ self.detailsVisible(!self.detailsVisible()) };
 
-	this.transactionsTrigger = ko.observable();
-	this.transactions = ko.computed(function(){
-		self.transactionsTrigger();
-		return (db.transactions[self.dateKey()] || []).map(function(item){return {name: item.name, value: item.value, undeletable: false}})
-			.concat(db.balanceSheetItems.filter(function(item){return item.dateDate == self.date().format("DD")}).map(function(item){return {name: item.name, value: item.value, undeletable: true}}));
-	});
+	this.transactions = ko.observableArray();
+	this.loadTransactions = function(){
+		$.getJSON(
+			"/budget-server/rest/transaction/findByDate", 
+			{date: self.dateKey(), ukey: window.ukey}, 
+			function(data){
+				console.log(data);
+			}
+		);
+	}
+
+	this.date.subscribe(this.loadTransactions);
 
 	this.sum = ko.computed(function(){
 		return self.transactions().reduce(function(acc, transaction){
@@ -29,21 +35,24 @@ function Day(parentCalendar){
 	});
 
 	this.addTransaction = function(){
-		var transaction = {name: prompt("Наименование"), value: prompt("Значение")};
-		if(!transaction.name || !transaction.value){
-			return;
-		}
-		var dateKey = self.dateKey();
-		if(!db.transactions[dateKey]){
-			db.transactions[dateKey] = [];
-		}
-		db.transactions[dateKey].push(transaction);
-		self.transactionsTrigger.notifySubscribers();
-	}
-
+		var transaction = {name: prompt("Имя"), value: prompt("Значение"), ukey: window.ukey, date: self.date().toJSON()};
+/*
+		$.post("/budget-server/rest/transaction/save", JSON.stringify(transaction), function(transaction){
+			console.log(transaction);
+		});
+*/
+		$.ajax({
+		  url: "/budget-server/rest/transaction/save",
+		  type: "POST",
+		  dataType: "json",
+		  contentType: "application/json",
+		  data: JSON.stringify(transaction),
+		  success: function(transaction){
+			console.log(transaction);
+		  }
+		});
+	};
 	this.removeTransaction = function(transaction){
-		var dateKey = self.dateKey();
-		db.transactions[dateKey] = db.transactions[dateKey].filter(function(item){return item.name != transaction.name || item.value != transaction.value});
-		self.transactionsTrigger.notifySubscribers();
-	}
+
+	};
 }

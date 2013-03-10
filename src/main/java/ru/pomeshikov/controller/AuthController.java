@@ -15,16 +15,18 @@ public class AuthController {
 	private UserDao userDao;
 
 	@Transactional
-	public String register(UserDO user) {
-		user.setPassword(toMD5(user.getPassword()));
-		user.setUkey(toMD5(user.getEmail() + ":" + user.getPassword()));
+	public String register(String email, String password) {
+		UserDO user = new UserDO();
+		user.setEmail(email);
+		user.setPassword(toMD5(password));
+		user.setUkey(toMD5(email + ":" + password));
 		userDao.save(user);
 		return user.getUkey();
 	}
 
 	@Transactional
-	public String login(UserDO user) {
-		return userDao.findByEmailAndPassword(user.getEmail(), toMD5(user.getPassword())).getUkey();
+	public String login(String email, String password) {
+		return userDao.findByEmailAndPassword(email, toMD5(password)).getUkey();
 	}
 	
 	private String toMD5(String s){
