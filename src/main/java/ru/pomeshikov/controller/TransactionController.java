@@ -27,6 +27,11 @@ public class TransactionController {
 		return transaction;
 	}
 	
+	@Transactional
+	public void delete(String ukey, Long id){
+		dao.delete(ukey, id);
+	}
+	
 	
 	
 }

@@ -21,7 +21,9 @@ function Day(parentCalendar){
 			"/budget-server/rest/transaction/findByDate", 
 			{date: self.dateKey(), ukey: window.ukey}, 
 			function(data){
-				console.log(data);
+				data.forEach(function(item){
+					self.transactions.push(item);
+				});
 			}
 		);
 	}
@@ -36,23 +38,26 @@ function Day(parentCalendar){
 
 	this.addTransaction = function(){
 		var transaction = {name: prompt("Имя"), value: prompt("Значение"), ukey: window.ukey, date: self.date().toJSON()};
-/*
-		$.post("/budget-server/rest/transaction/save", JSON.stringify(transaction), function(transaction){
-			console.log(transaction);
-		});
-*/
+
 		$.ajax({
-		  url: "/budget-server/rest/transaction/save",
-		  type: "POST",
-		  dataType: "json",
-		  contentType: "application/json",
-		  data: JSON.stringify(transaction),
-		  success: function(transaction){
-			console.log(transaction);
-		  }
+			url: "/budget-server/rest/transaction/save",
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(transaction),
+			success: function(transaction){
+				self.transactions.push(transaction);
+			}
 		});
 	};
 	this.removeTransaction = function(transaction){
-
+		$.ajax({
+			url: "/budget-server/rest/transaction/delete",
+			type: "POST",
+			data: {ukey:window.ukey, id:transaction.id},
+			success: function(){
+				self.transactions.remove(function(item) { return item.id == transaction.id })
+			}
+		});
 	};
 }

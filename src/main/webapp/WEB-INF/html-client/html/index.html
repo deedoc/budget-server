@@ -122,7 +122,7 @@
 										<tr data-bind="attr: {'class': value > 0 ? 'text-success' : value == 0 ? '' : 'text-error'}">
 											<td data-bind="text: name" />
 											<td data-bind="text: value" />
-											<td><button class="btn btn-mini" type="button" data-bind="visible: !undeletable, click: function(){$parent.removeTransaction($data)}"><i class="icon-minus-sign"></i></button></td>
+											<td><button class="btn btn-mini" type="button" data-bind="visible: true, click: function(){$parent.removeTransaction($data)}"><i class="icon-minus-sign"></i></button></td>
 										</tr>
 									</tbody>
 								</table>
