@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -24,6 +26,7 @@ public class TransactionDO {
 	private String ukey;
 	
 	@Column(name="date", columnDefinition="date")
+	@Temporal(TemporalType.DATE)
 	private Date date;
 	
 	@Column(name="name")

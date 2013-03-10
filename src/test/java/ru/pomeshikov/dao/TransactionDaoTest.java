@@ -39,10 +39,7 @@ public class TransactionDaoTest extends BaseTest {
 		
 		dao.save(t);
 		
-		/**
-		 * С датой что-то не то. С ней не ищет
-		 */
-		Assert.assertEquals(2, dao.findByDate("ukey", date).size());
+		Assert.assertEquals(2, dao.findByDate("ukey", new Date()).size());
 		
 	}
 
