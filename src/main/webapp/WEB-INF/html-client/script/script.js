@@ -1,6 +1,6 @@
 window.onload = function(){
 
-	$.post("/budget-server/rest/auth/login", {email:"pomeshikov@gmail.com", password: "123456"}, function(ukey){
+	$.post("/budget-server/rest/auth/login", {email:prompt("email"), password: prompt("password")}, function(ukey){
 		window.ukey = ukey;
 
 		var calendar = new Calendar();
