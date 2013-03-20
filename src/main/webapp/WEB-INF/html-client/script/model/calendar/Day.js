@@ -37,8 +37,6 @@ function Day(parentCalendar){
 	});
 
 	this.addTransaction = function(){
-		debugger;
-		return;
 		var transaction = {name: prompt("Имя"), value: prompt("Значение"), ukey: window.ukey, date: self.date().toJSON()};
 
 		$.ajax({
