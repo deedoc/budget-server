@@ -21,6 +21,7 @@ function Day(parentCalendar){
 			"/budget-server/rest/transaction/findByDate", 
 			{date: self.dateKey(), ukey: window.ukey}, 
 			function(data){
+				self.transactions([]);
 				data.forEach(function(item){
 					self.transactions.push(item);
 				});
