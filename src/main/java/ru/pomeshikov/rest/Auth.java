@@ -1,7 +1,6 @@
 package ru.pomeshikov.rest;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +26,7 @@ public class Auth {
 	}
 	
 	@RequestMapping(value="login", method=RequestMethod.POST)
-	public void login(HttpServletRequest req, HttpServletResponse resp){
-		String ukey = null;
-		for(int i = 0; i < req.getCookies().length; i++){
-			Cookie cookie = req.getCookies()[i];
-			if(cookie.getName().equals("ukey")){
-				ukey = cookie.getValue(); 
-			}
-		}
-		
-		String email = req.getParameter("email");
-		String password = req.getParameter("password");
-		
+	public void login(HttpServletResponse resp, @CookieValue(value="ukey", required=false) String ukey, @RequestParam(required=false) String email, @RequestParam(required=false) String password){		
 		if(email != null && password != null){
 			ukey = authController.login(email, password);
 		}
