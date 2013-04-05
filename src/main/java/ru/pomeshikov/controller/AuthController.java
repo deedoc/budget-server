@@ -29,6 +29,11 @@ public class AuthController {
 		return userDao.findByEmailAndPassword(email, toMD5(password)).getUkey();
 	}
 	
+	@Transactional
+	public String login(String ukey){
+		return userDao.findByUkey(ukey).getUkey();
+	}
+	
 	private String toMD5(String s){
 		return DigestUtils.md5DigestAsHex(s.getBytes());
 	}

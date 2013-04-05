@@ -5,82 +5,6 @@
 		<link href="../style/style.css" rel="stylesheet" media="screen">
 	</head>
 	<body>
-		<!--
-		<div class="container" id="balanceSheet">
-			<div class="span8">
-				<button class="btn btn-large btn-block btn-primary btn-success" type="button" data-bind="click: switchBalanceSheetVisibility, text: (sum() > 0 ? '+' : '') + sum() + ' в месяц', css: { 'btn-success': sum() >= 0, 'btn-danger': sum() < 0 }"></button>
-				<div data-bind="visible: balanceSheetVisible">
-					<table width="100%">
-						<tr>
-							<td style="vertical-align:top">
-								<table class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>Актив:</th>
-											<th data-bind="text: assetsSum"/>
-											<th>Число</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: assets">
-										<tr>
-											<td width="200px">
-												<span data-bind="text: name"></span>
-											</td>
-											<td width="70px">
-												<span data-bind="text: value"></span>
-											</td>
-											<td width="30px">
-												<span data-bind="text: dateDate"></span>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-							<td style="vertical-align:top">
-								<table class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>Пассив:</th>
-											<th data-bind="text: liabilitiesSum"/>
-											<th>Число</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: liabilities">
-										<tr>
-											<td width="200px">
-												<span data-bind="text: name"></span>
-												<input type="text" data-bind="value: name"/>
-											</td>
-											<td width="70px">
-												<span data-bind="text: value"></span>
-												<input type="text" data-bind="value: value"/>
-											</td>
-											<td width="30px">
-												<span data-bind="text: dateDate"></span>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<table width="100%">
-									<tr>
-										<td><input placeholder="Имя..." data-bind="value: nameToAdd" /></td>
-										<td><input placeholder="Значение..." data-bind="value: valueToAdd" /></td>
-										<td><input placeholder="Число месяца..." data-bind="value: dateDateToAdd" /></td>
-										<td><button class="btn" data-bind="click: add"><i class="icon-plus"></i></button></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		</div>
-		-->
-		<br />
 		<div class="container" id="calendar">
 			<table class="table table-bordered">
 				<thead>
@@ -137,7 +61,6 @@
 		<script src="../lib/jquery/jquery-1.9.1.min.js"></script>
 		<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
 
-		<script src="../script/db/db.js"></script>
 		<script src="../script/model/BalanceSheet.js"></script>
 		<script src="../script/model/BalanceSheetItem.js"></script>
 		<script src="../script/model/BalanceSheetItem.js"></script>

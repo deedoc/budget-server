@@ -19,7 +19,7 @@ function Day(parentCalendar){
 	this.loadTransactions = function(){
 		$.getJSON(
 			"/budget-server/rest/transaction/findByDate", 
-			{date: self.dateKey(), ukey: window.ukey}, 
+			{date: self.dateKey()}, 
 			function(data){
 				self.transactions([]);
 				data.forEach(function(item){
@@ -38,7 +38,7 @@ function Day(parentCalendar){
 	});
 
 	this.addTransaction = function(){
-		var transaction = {name: prompt("Имя"), value: prompt("Значение"), ukey: window.ukey, date: self.date().toJSON()};
+		var transaction = {name: prompt("Имя"), value: prompt("Значение"), date: self.date().toJSON()};
 
 		$.ajax({
 			url: "/budget-server/rest/transaction/save",
@@ -55,7 +55,7 @@ function Day(parentCalendar){
 		$.ajax({
 			url: "/budget-server/rest/transaction/delete",
 			type: "POST",
-			data: {ukey:window.ukey, id:transaction.id},
+			data: {id:transaction.id},
 			success: function(){
 				self.transactions.remove(function(item) { return item.id == transaction.id })
 			}

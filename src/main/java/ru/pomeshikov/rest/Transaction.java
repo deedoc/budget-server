@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,17 +23,18 @@ public class Transaction {
 	private TransactionController controller;
 	
 	@RequestMapping(value="findByDate", method=RequestMethod.GET)
-	public @ResponseBody List<TransactionDO> findByDate(String ukey, Date date){
+	public @ResponseBody List<TransactionDO> findByDate(@CookieValue("ukey") String ukey, @RequestParam Date date){
 		return controller.findByDate(ukey, date);
 	}
 	
 	@RequestMapping(value="save", method=RequestMethod.POST)
-	public @ResponseBody TransactionDO save(@RequestBody TransactionDO transaction){
+	public @ResponseBody TransactionDO save(@CookieValue("ukey") String ukey, @RequestBody TransactionDO transaction){
+		transaction.setUkey(ukey);
 		return controller.save(transaction);
 	}
 	
 	@RequestMapping(value="delete", method=RequestMethod.POST)
-	public @ResponseBody void delete(@RequestParam String ukey, @RequestParam Long id){
+	public @ResponseBody void delete(@CookieValue("ukey") String ukey, @RequestParam Long id){
 		controller.delete(ukey, id);
 	}
 
