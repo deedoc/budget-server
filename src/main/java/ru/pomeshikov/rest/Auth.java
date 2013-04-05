@@ -25,12 +25,6 @@ public class Auth {
 	public @ResponseBody String register(@RequestParam String email, @RequestParam String password){
 		return authController.register(email, password);
 	}
-	/*
-	@RequestMapping(value="login", method=RequestMethod.POST)
-	public @ResponseBody String login(@RequestParam String email, @RequestParam String password){
-		return authController.login(email, password);
-	}
-	*/
 	
 	@RequestMapping(value="login", method=RequestMethod.POST)
 	public void login(HttpServletRequest req, HttpServletResponse resp){
@@ -47,9 +41,12 @@ public class Auth {
 		
 		if(email != null && password != null){
 			ukey = authController.login(email, password);
-			resp.addCookie(new Cookie("ukey", ukey));
-		} else if(ukey != null){
-			resp.addCookie(new Cookie("ukey", ukey));
+		}
+		if(ukey != null){
+			Cookie cookie = new Cookie("ukey", ukey);
+			cookie.setMaxAge(-1);
+			cookie.setPath("/");
+			resp.addCookie(cookie);
 		} else {
 			throw new RuntimeException("Not authorized");
 		}
