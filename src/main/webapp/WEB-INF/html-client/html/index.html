@@ -5,7 +5,24 @@
 		<link href="../style/style.css" rel="stylesheet" media="screen">
 	</head>
 	<body>
-		<div data-bind="template: {name: 'calendar-template', data: calendar}"></div>
+		<div class="container">
+			<div class="row">
+				<div class="tabbable tabs-left">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#calendarTab" data-toggle="tab">Календарь</a></li>
+						<li><a href="#reportsTab" data-toggle="tab">Отчеты</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="calendarTab">
+							<div data-bind="template: {name: 'calendar-template', data: calendar}"></div>
+						</div>
+						<div class="tab-pane" id="reportsTab">
+							<p>Надо придумать ченить</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<script src="../lib/later/later.min.js"></script>
 		<script src="../lib/moment/moment.min.js"></script>
