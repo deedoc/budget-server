@@ -17,7 +17,7 @@ import ru.pomeshikov.model.TransactionDO;
 
 @Service
 @RequestMapping("/transaction")
-public class Transaction {
+public class TransactionService {
 	
 	@Autowired
 	private TransactionController controller;

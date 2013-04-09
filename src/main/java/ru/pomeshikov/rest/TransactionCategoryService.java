@@ -13,7 +13,7 @@ import ru.pomeshikov.model.TransactionCategoryDO;
 
 @Service
 @RequestMapping("/transactionCategory")
-public class TransactionCategory {
+public class TransactionCategoryService {
 	
 	@Autowired
 	private TransactionCategoryController controller;

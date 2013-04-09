@@ -15,7 +15,7 @@ import ru.pomeshikov.controller.AuthController;
 
 @Service
 @RequestMapping("/auth")
-public class Auth {
+public class AuthService {
 	
 	@Autowired
 	AuthController authController;
