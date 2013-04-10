@@ -1,14 +1,14 @@
 window.onload = function(){
-	$.post("/budget-server/rest/auth/login", {}, function(){
+	var initVm = function(){
 		window.vm = {
-			calendar: new Calendar()
+			calendar: new Calendar(),
+			navbar: {
+				email: ko.observable("dummy-email@not-implemented.yet")
+			}
 		}
 		ko.applyBindings(window.vm);
-	}).error(function(){
-		$.post("/budget-server/rest/auth/login", {email:prompt("email"), password: prompt("password")}, function(){
-			window.vm = new Calendar();
-			window.calendar = window.vm;
-			ko.applyBindings(window.wm);
-		});		
+	};
+	$.post("/budget-server/rest/auth/login", {}, initVm).error(function(){
+		$.post("/budget-server/rest/auth/login", {email:prompt("email"), password: prompt("password")}, initVm);
 	});
 }

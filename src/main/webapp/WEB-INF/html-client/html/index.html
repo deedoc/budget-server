@@ -4,7 +4,10 @@
 		<link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link href="../style/style.css" rel="stylesheet" media="screen">
 	</head>
-	<body>
+	<body style="padding-top:50px">
+
+		<div data-bind="template: {name: 'navbar-template', data: navbar}"></div>
+
 		<div class="container">
 			<div class="row">
 				<div class="tabbable tabs-left">
@@ -39,6 +42,7 @@
 		<script src="../script/model/calendar/Day.js"></script>
 		<script src="../script/model/calendar/Calendar.js"></script>
 
+		<script type="text/html" id="navbar-template" src="./templates/navbar.js"></script>
 		<script type="text/html" id="calendar-template" src="./templates/calendar.js"></script>
 		<script type="text/javascript">
 			$("script[id$='-template']").each(function(index, item){
