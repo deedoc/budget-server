@@ -4,128 +4,27 @@
 		<link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link href="../style/style.css" rel="stylesheet" media="screen">
 	</head>
-	<body>
-		<!--
-		<div class="container" id="balanceSheet">
-			<div class="span8">
-				<button class="btn btn-large btn-block btn-primary btn-success" type="button" data-bind="click: switchBalanceSheetVisibility, text: (sum() > 0 ? '+' : '') + sum() + ' в месяц', css: { 'btn-success': sum() >= 0, 'btn-danger': sum() < 0 }"></button>
-				<div data-bind="visible: balanceSheetVisible">
-					<table width="100%">
-						<tr>
-							<td style="vertical-align:top">
-								<table class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>Актив:</th>
-											<th data-bind="text: assetsSum"/>
-											<th>Число</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: assets">
-										<tr>
-											<td width="200px">
-												<span data-bind="text: name"></span>
-											</td>
-											<td width="70px">
-												<span data-bind="text: value"></span>
-											</td>
-											<td width="30px">
-												<span data-bind="text: dateDate"></span>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-							<td style="vertical-align:top">
-								<table class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>Пассив:</th>
-											<th data-bind="text: liabilitiesSum"/>
-											<th>Число</th>
-										</tr>
-									</thead>
-									<tbody data-bind="foreach: liabilities">
-										<tr>
-											<td width="200px">
-												<span data-bind="text: name"></span>
-												<input type="text" data-bind="value: name"/>
-											</td>
-											<td width="70px">
-												<span data-bind="text: value"></span>
-												<input type="text" data-bind="value: value"/>
-											</td>
-											<td width="30px">
-												<span data-bind="text: dateDate"></span>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<table width="100%">
-									<tr>
-										<td><input placeholder="Имя..." data-bind="value: nameToAdd" /></td>
-										<td><input placeholder="Значение..." data-bind="value: valueToAdd" /></td>
-										<td><input placeholder="Число месяца..." data-bind="value: dateDateToAdd" /></td>
-										<td><button class="btn" data-bind="click: add"><i class="icon-plus"></i></button></td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
+	<body style="padding-top:50px">
+
+		<div data-bind="template: {name: 'navbar-template', data: navbar}"></div>
+
+		<div class="container">
+			<div class="row">
+				<div class="tabbable tabs-left">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#calendarTab" data-toggle="tab">Календарь</a></li>
+						<li><a href="#reportsTab" data-toggle="tab">Отчеты</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="calendarTab">
+							<div data-bind="template: {name: 'calendar-template', data: calendar}"></div>
+						</div>
+						<div class="tab-pane" id="reportsTab">
+							<p>Надо придумать ченить</p>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		-->
-		<br />
-		<div class="container" id="calendar">
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th colspan="7">
-							<a class="btn btn-large" data-bind="click: goBackward" href="#"><i class="icon-backward"></i>&nbsp;</a>
-							<span style="text-align:center; font-size: 33px;" data-bind="text:base().format('MMMM')"></span>
-							<a class="btn btn-large" data-bind="click: goForward" href="#"><i class="icon-forward"></i>&nbsp;</a>
-						</th>
-					</tr>
-					<tr>
-						<th>Пн</th>
-						<th>Вт</th>
-						<th>Ср</th>
-						<th>Чт</th>
-						<th>Пт</th>
-						<th>Сб</th>
-						<th>Вс</th>
-					</tr>
-				</thead>
-				<tbody data-bind="foreach: weeks">
-					<tr data-bind="foreach: days">
-						<td data-bind="style:{opacity: isAnotherMonth() ? '0.5' : '1', border: isToday() ? '2px dashed black' : ''}">
-							<div style="font-size:40px; opacity: 0.9; position: absolute" data-bind="text: date().format('DD')"></div>
-							<div style="text-align: right; font-size:20px;" data-bind="click: toggleDetailsVisibility, text: sum() != 0 ? sum() : '&nbsp;', attr: {'class': sum() > 0 ? 'text-success' : sum() == 0 ? '' : 'text-error'}"></div>
-							<div class="btn-toolbar">
-								<div class="btn-group">
-									<a class="btn btn-mini" href="#" data-bind="click: addTransaction"><i class="icon-plus-sign"></i></a>
-								</div>
-							</div>
-							<div data-bind="visible: detailsVisible">
-								<table style="width: 100%">
-									<tbody data-bind="foreach: transactions">
-										<tr data-bind="attr: {'class': value > 0 ? 'text-success' : value == 0 ? '' : 'text-error'}">
-											<td data-bind="text: name" />
-											<td data-bind="text: value" />
-											<td><button class="btn btn-mini" type="button" data-bind="visible: true, click: function(){$parent.removeTransaction($data)}"><i class="icon-minus-sign"></i></button></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 
 		<script src="../lib/later/later.min.js"></script>
@@ -137,12 +36,20 @@
 		<script src="../lib/jquery/jquery-1.9.1.min.js"></script>
 		<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
 
-		<script src="../script/db/db.js"></script>
 		<script src="../script/model/BalanceSheet.js"></script>
 		<script src="../script/model/BalanceSheetItem.js"></script>
 		<script src="../script/model/BalanceSheetItem.js"></script>
 		<script src="../script/model/calendar/Day.js"></script>
 		<script src="../script/model/calendar/Calendar.js"></script>
+
+		<script type="text/html" id="navbar-template" src="./templates/navbar.js"></script>
+		<script type="text/html" id="calendar-template" src="./templates/calendar.js"></script>
+		<script type="text/javascript">
+			$("script[id$='-template']").each(function(index, item){
+				$(item).load(item.src);
+			});
+		</script>
+
 		<script src="../script/script.js"></script>
 	</body>
 </html>

@@ -1,3 +1,9 @@
-input {
-	width: 90%;
+.dropdown-menu-inverse {
+	background-color: #1b1b1b;
+}
+.dropdown-menu-inverse li a {
+	color: #999;
+}
+.dropdown-menu-inverse li a:hover {
+	color: #fff;
 }

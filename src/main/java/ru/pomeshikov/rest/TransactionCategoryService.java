@@ -1,8 +1,5 @@
 package ru.pomeshikov.rest;
 
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,24 +8,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ru.pomeshikov.controller.TransactionController;
-import ru.pomeshikov.model.TransactionDO;
+import ru.pomeshikov.controller.TransactionCategoryController;
+import ru.pomeshikov.model.TransactionCategoryDO;
 
 @Service
-@RequestMapping("/transaction")
-public class Transaction {
+@RequestMapping("/transactionCategory")
+public class TransactionCategoryService {
 	
 	@Autowired
-	private TransactionController controller;
+	private TransactionCategoryController controller;
 	
-	@RequestMapping(value="findByDate", method=RequestMethod.GET)
-	public @ResponseBody List<TransactionDO> findByDate(String ukey, Date date){
-		return controller.findByDate(ukey, date);
+	@RequestMapping(value="findById", method=RequestMethod.GET)
+	public @ResponseBody TransactionCategoryDO findById(String ukey, Long id){
+		return controller.findById(ukey, id);
 	}
 	
 	@RequestMapping(value="save", method=RequestMethod.POST)
-	public @ResponseBody TransactionDO save(@RequestBody TransactionDO transaction){
-		return controller.save(transaction);
+	public @ResponseBody TransactionCategoryDO save(@RequestBody TransactionCategoryDO transactionCategory){
+		return controller.save(transactionCategory);
 	}
 	
 	@RequestMapping(value="delete", method=RequestMethod.POST)
