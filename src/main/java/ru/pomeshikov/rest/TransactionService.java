@@ -22,7 +22,7 @@ public class TransactionService {
 	@Autowired
 	private TransactionController controller;
 	
-	@RequestMapping(value="findByDate", method=RequestMethod.GET)
+	@RequestMapping(value="findByDate", method=RequestMethod.POST)
 	public @ResponseBody List<TransactionDO> findByDate(@CookieValue("ukey") String ukey, @RequestParam Date date){
 		return controller.findByDate(ukey, date);
 	}

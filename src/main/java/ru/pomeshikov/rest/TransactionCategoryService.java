@@ -18,7 +18,7 @@ public class TransactionCategoryService {
 	@Autowired
 	private TransactionCategoryController controller;
 	
-	@RequestMapping(value="findById", method=RequestMethod.GET)
+	@RequestMapping(value="findById", method=RequestMethod.POST)
 	public @ResponseBody TransactionCategoryDO findById(String ukey, Long id){
 		return controller.findById(ukey, id);
 	}
