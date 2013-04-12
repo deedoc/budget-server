@@ -1,30 +1,22 @@
 package ru.pomeshikov.rest.client;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.PrioritizedParameterNameDiscoverer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-
-import ru.pomeshikov.rest.AuthService;
 
 @Service
 @RequestMapping("/client/jquery/getClient")
@@ -44,19 +36,62 @@ public class Jquery {
 //		}
 //	}
 	
+	private class Client {
+		public String url;
+		public Map<String, Service> services = new HashMap<String, Service>();
+		
+		@Override
+		public String toString() {
+			String result = "var client = {\n";
+			for(Entry<String, Service> service : services.entrySet()){
+				result += "\t" + service.getKey().substring(1) + ": {\n";
+				for(Entry<String, Method> method : service.getValue().methods.entrySet()){
+					result += "\t\t" + method.getKey().substring(1) + ": function /* ";
+					for(String paramType : method.getValue().paramTypes){
+						result += paramType + ", ";
+					}
+					result += " */ params, success, error){\n";
+					result += "\t\t\t$.post('";
+					result += url + service.getKey() + method.getKey();
+					result += "', params, success).error(error);\n";
+					result += "\t\t},\n";
+				}
+				result += "\t},\n";
+			}
+			result += "}";
+			return result;
+		}
+	}
+	
+	private class Service {
+		public Map<String, Method> methods = new HashMap<String, Method>();
+	}
+	
+	private class Method {
+		public List<String> paramTypes = new ArrayList<String>();
+	}
+	
 	@PostConstruct
 	void init(){
-		String url = requestMappingHandlerMapping.getApplicationContext().getApplicationName() + "/rest";
+		Client client = new Client();
+		client.url = requestMappingHandlerMapping.getApplicationContext().getApplicationName() + "/rest";
+		
 		for(Entry<RequestMappingInfo, HandlerMethod> h : requestMappingHandlerMapping.getHandlerMethods().entrySet()){
-			String metUrl = h.getKey().getPatternsCondition().getPatterns().iterator().next();
-			System.out.println(metUrl);
-			List<String> parameterTypes = new ArrayList<String>();
+			String[] explodedUrl = h.getKey().getPatternsCondition().getPatterns().iterator().next().split("/");
+			String serviceUrl = "/" + explodedUrl[1];
+			if(client.services.get(serviceUrl) == null){
+				client.services.put(serviceUrl, new Service());
+			}
+			
+			String methodUrl = "/" + explodedUrl[2];
+			client.services.get(serviceUrl).methods.put(methodUrl, new Method());
 			for(MethodParameter p : h.getValue().getMethodParameters()){
 				if(p.getParameterAnnotation(RequestParam.class) != null || p.getParameterAnnotation(RequestBody.class) != null){
-					System.out.println("\t"+p.getParameterType().getSimpleName());
-					parameterTypes.add(p.getParameterType().getSimpleName());
+					client.services.get(serviceUrl).methods.get(methodUrl).paramTypes.add(p.getParameterType().getSimpleName());
 				}
-			}
+			}			
 		}
+		
+		System.out.println(client.toString());
 	}
 }
