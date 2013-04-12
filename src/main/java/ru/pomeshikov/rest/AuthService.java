@@ -21,12 +21,12 @@ public class AuthService {
 	AuthController authController;
 	
 	@RequestMapping(value="register", method=RequestMethod.POST)
-	public @ResponseBody String register(@RequestParam String email, @RequestParam String password){
+	public @ResponseBody String register(@RequestParam("email") String email, @RequestParam("password") String password){
 		return authController.register(email, password);
 	}
 	
 	@RequestMapping(value="login", method=RequestMethod.POST)
-	public void login(HttpServletResponse resp, @CookieValue(value="ukey", required=false) String ukey, @RequestParam(required=false) String email, @RequestParam(required=false) String password){		
+	public void login(HttpServletResponse resp, @CookieValue(value="ukey", required=false) String ukey, @RequestParam(value="email", required=false) String email, @RequestParam(value="password", required=false) String password){		
 		if(email != null && password != null){
 			ukey = authController.login(email, password);
 		}
