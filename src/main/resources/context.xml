@@ -10,8 +10,10 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
  
- 	<context:annotation-config/> 	
-	<context:component-scan base-package="ru.pomeshikov" />
+ 	<context:annotation-config /> 	
+	<context:component-scan base-package="ru.pomeshikov">
+		<context:exclude-filter type="regex" expression="ru\.pomeshikov\.rest\..*"/>
+	</context:component-scan>
 	
 	<import resource="./hibernate.xml"/>
  
