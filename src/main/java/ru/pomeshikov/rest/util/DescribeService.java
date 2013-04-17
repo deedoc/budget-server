@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,8 +30,27 @@ public class DescribeService {
 	private RequestMappingHandlerMapping requestMappingHandlerMapping;
 	
 	@RequestMapping(value="describe", method=RequestMethod.GET)
-	public @ResponseBody Description describe(){
-		return description;
+	public @ResponseBody String describe(){
+		String result = "var Client = function() {\n";
+		result += String.format("\tthis.url = '%s',\n", description.url);
+		for(Service service : description.services){
+			result += String.format("\tthis.%s = {\n", service.url.replaceAll("/", ""));
+			for(Method method : service.methods){
+				result += String.format("\t\t%s: ", method.url.replaceAll("/", ""));
+				result += "function(";
+				for(int paramIndex = 0; paramIndex < method.params.size(); paramIndex++){
+					Param param = method.params.get(paramIndex);
+					result += String.format("/*%s %s %s*/ %s" + (paramIndex != method.params.size() -1 ? ", " : ""), param.type, param.clazz, param.optional ? "optional" : "", param.name != null && !param.name.isEmpty() ? param.name : "param" + paramIndex);
+				}
+				result += "){\n";
+				result += "\t\t\tjQuery.post({\n";
+				//result += "\t\t\t\t"
+				result += "\t\t},\n";
+			}
+			result += "\t},\n";
+		}
+		result += "}\n";
+		return result;
 	}
 	
 	private Description description = null;
