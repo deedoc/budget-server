@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +21,12 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 @Service
 @RequestMapping("/util/describe")
 public class DescribeService {
@@ -29,28 +34,77 @@ public class DescribeService {
 	@Autowired
 	private RequestMappingHandlerMapping requestMappingHandlerMapping;
 	
+	private static String firstSymbolToLowerCase(String s){
+		return s.toLowerCase().substring(0, 1) + s.substring(1);
+	}
+	
 	@RequestMapping(value="describe", method=RequestMethod.GET)
 	public @ResponseBody String describe(){
-		String result = "var Client = function() {\n";
-		result += String.format("\tthis.url = '%s',\n", description.url);
-		for(Service service : description.services){
-			result += String.format("\tthis.%s = {\n", service.url.replaceAll("/", ""));
-			for(Method method : service.methods){
-				result += String.format("\t\t%s: ", method.url.replaceAll("/", ""));
-				result += "function(";
-				for(int paramIndex = 0; paramIndex < method.params.size(); paramIndex++){
-					Param param = method.params.get(paramIndex);
-					result += String.format("/*%s %s %s*/ %s" + (paramIndex != method.params.size() -1 ? ", " : ""), param.type, param.clazz, param.optional ? "optional" : "", param.name != null && !param.name.isEmpty() ? param.name : "param" + paramIndex);
-				}
-				result += "){\n";
-				result += "\t\t\tjQuery.post({\n";
-				//result += "\t\t\t\t"
-				result += "\t\t},\n";
+		String result = "window.serv = {\n";
+		result += "\t_doPost: function(url, data, success, error){\n";
+		result += "\t\treturn $.post({type: 'POST', url: url, data: data, success: success, error: error || serv._error});\n";
+		result += "\t},\n";
+		
+		result += Joiner.on(",\n").join(Iterables.transform(description.services, new Function<Service, String>() {
+
+			@Override
+			public String apply(final Service service) {
+				String result = String.format("\t%s:{\n", service.url.replace("/", ""));
+				result += Joiner.on(",\n").join(Iterables.transform(service.methods, new Function<Method, String>() {
+
+					@Override
+					public String apply(Method method) {
+						List<Param> cookies = Lists.newArrayList(Iterables.filter(method.params, new Predicate<Param>() {
+
+							@Override
+							public boolean apply(Param param) {
+								return param.type.equals("CookieValue");
+							}
+						}));
+						List<Param> notCookies = Lists.newArrayList(Iterables.filter(method.params, new Predicate<Param>() {
+
+							@Override
+							public boolean apply(Param param) {
+								return !param.type.equals("CookieValue");
+							}
+						}));
+						String result = String.format("\t\t/* %s */\n", Joiner.on(", ").join(Iterables.transform(cookies, new Function<Param, String>() {
+
+							@Override
+							public String apply(Param param) {
+								String optional = param.optional ? "optional " : "";
+								String cookie = "cookie ";
+								String name = param.name;
+								return optional + cookie + param.clazz + " " + name;
+							}
+						})));
+						result += String.format("\t\t%s: function(%s){\n", method.url.replace("/", ""), Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
+
+							@Override
+							public String apply(Param param) {
+								String optional = param.optional ? "optional " : "";
+								String cookie = "";
+								String name = param.type.equals("RequestBody") ? firstSymbolToLowerCase(param.clazz) : param.name;
+								return "/* " + optional + cookie + param.clazz + " */ " + name;
+							}
+						})));
+						result += String.format("\t\t\treturn serv._doPost('%s', %s, success, error);\n", description.url+service.url+method.url, notCookies.size() == 1 &&  notCookies.get(0).type.equals("RequestBody") ? firstSymbolToLowerCase(notCookies.get(0).clazz) : "{" + Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
+
+							@Override
+							public String apply(Param param) {
+								return String.format("%s:%s", param.name, param.name);
+							}
+						})) + "}");
+						result += "\t\t}";
+						return result;
+					}
+				}));
+				result += "\n\t}";
+				return result;
 			}
-			result += "\t},\n";
-		}
-		result += "}\n";
-		return result;
+		}));
+		
+		return result + "\n}";
 	}
 	
 	private Description description = null;

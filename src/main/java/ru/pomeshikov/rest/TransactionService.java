@@ -23,7 +23,7 @@ public class TransactionService {
 	private TransactionController controller;
 	
 	@RequestMapping(value="findByDate", method=RequestMethod.POST)
-	public @ResponseBody List<TransactionDO> findByDate(@CookieValue("ukey") String ukey, @RequestParam Date date){
+	public @ResponseBody List<TransactionDO> findByDate(@CookieValue("ukey") String ukey, @RequestParam("date") Date date){
 		return controller.findByDate(ukey, date);
 	}
 	
@@ -34,7 +34,7 @@ public class TransactionService {
 	}
 	
 	@RequestMapping(value="delete", method=RequestMethod.POST)
-	public @ResponseBody void delete(@CookieValue("ukey") String ukey, @RequestParam Long id){
+	public @ResponseBody void delete(@CookieValue("ukey") String ukey, @RequestParam("id") Long id){
 		controller.delete(ukey, id);
 	}
 
