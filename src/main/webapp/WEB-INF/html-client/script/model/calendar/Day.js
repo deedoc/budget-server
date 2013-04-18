@@ -17,16 +17,12 @@ function Day(parentCalendar){
 
 	this.transactions = ko.observableArray();
 	this.loadTransactions = function(){
-		$.getJSON(
-			"/budget-server/rest/transaction/findByDate", 
-			{date: self.dateKey()}, 
-			function(data){
-				self.transactions([]);
-				data.forEach(function(item){
-					self.transactions.push(item);
-				});
-			}
-		);
+		serv.transaction.findByDate(self.dateKey(), function(data){
+			self.transactions([]);
+			data.forEach(function(item){
+				self.transactions.push(item);
+			});
+		});
 	}
 
 	this.date.subscribe(this.loadTransactions);
@@ -40,25 +36,13 @@ function Day(parentCalendar){
 	this.addTransaction = function(){
 		var transaction = {name: prompt("Имя"), value: prompt("Значение"), date: self.date().toJSON()};
 
-		$.ajax({
-			url: "/budget-server/rest/transaction/save",
-			type: "POST",
-			dataType: "json",
-			contentType: "application/json",
-			data: JSON.stringify(transaction),
-			success: function(transaction){
-				self.transactions.push(transaction);
-			}
+		serv.transaction.save(JSON.stringify(transaction), function(transaction){
+			self.transactions.push(transaction);
 		});
 	};
 	this.removeTransaction = function(transaction){
-		$.ajax({
-			url: "/budget-server/rest/transaction/delete",
-			type: "POST",
-			data: {id:transaction.id},
-			success: function(){
-				self.transactions.remove(function(item) { return item.id == transaction.id })
-			}
+		serv.transaction.delete(transaction.id, function(){
+			self.transactions.remove(function(item) { return item.id == transaction.id })
 		});
 	};
 }

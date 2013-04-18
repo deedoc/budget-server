@@ -28,7 +28,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 @Service
-@RequestMapping("/util/describe")
+@RequestMapping("/util/client")
 public class DescribeService {
 	
 	@Autowired
@@ -38,11 +38,15 @@ public class DescribeService {
 		return s.toLowerCase().substring(0, 1) + s.substring(1);
 	}
 	
-	@RequestMapping(value="describe", method=RequestMethod.GET)
+	@RequestMapping(value="/jquery", method=RequestMethod.GET)
 	public @ResponseBody String describe(){
 		String result = "window.serv = {\n";
 		result += "\t_doPost: function(url, data, success, error){\n";
-		result += "\t\treturn $.post({type: 'POST', url: url, data: data, success: success, error: error || serv._error});\n";
+		result += "\t\treturn $.ajax({type: 'POST', url: url, data: data, success: success, error: error || serv._error});\n";
+		result += "\t},\n";
+		
+		result += "\t_doPostJson: function(url, data, success, error){\n";
+		result += "\t\treturn $.ajax({type: 'POST', url: url, contentType: 'application/json', data: data, success: success, error: error || serv._error});\n";
 		result += "\t},\n";
 		
 		result += Joiner.on(",\n").join(Iterables.transform(description.services, new Function<Service, String>() {
@@ -78,7 +82,7 @@ public class DescribeService {
 								return optional + cookie + param.clazz + " " + name;
 							}
 						})));
-						result += String.format("\t\t%s: function(%s){\n", method.url.replace("/", ""), Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
+						result += String.format("\t\t%s: function(%s" + (notCookies.size() > 0 ? ", " : "") + "success, error){\n", method.url.replace("/", ""), Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
 
 							@Override
 							public String apply(Param param) {
@@ -88,7 +92,7 @@ public class DescribeService {
 								return "/* " + optional + cookie + param.clazz + " */ " + name;
 							}
 						})));
-						result += String.format("\t\t\treturn serv._doPost('%s', %s, success, error);\n", description.url+service.url+method.url, notCookies.size() == 1 &&  notCookies.get(0).type.equals("RequestBody") ? firstSymbolToLowerCase(notCookies.get(0).clazz) : "{" + Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
+						result += String.format("\t\t\treturn serv._doPost" + (notCookies.size() == 1 &&  notCookies.get(0).type.equals("RequestBody") ? "Json" : "") + "('%s', %s, success, error);\n", description.url+service.url+method.url, notCookies.size() == 1 &&  notCookies.get(0).type.equals("RequestBody") ? firstSymbolToLowerCase(notCookies.get(0).clazz) : "{" + Joiner.on(", ").join(Iterables.transform(notCookies, new Function<Param, String>() {
 
 							@Override
 							public String apply(Param param) {

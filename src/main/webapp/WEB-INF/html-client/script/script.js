@@ -8,7 +8,7 @@ window.onload = function(){
 		}
 		ko.applyBindings(window.vm);
 	};
-	$.post("/budget-server/rest/auth/login", {}, initVm).error(function(){
-		$.post("/budget-server/rest/auth/login", {email:prompt("email"), password: prompt("password")}, initVm);
+	serv.auth.login(undefined, undefined, initVm, function(){
+		serv.auth.login(prompt("email"), prompt("password"), initVm, function(){alert("Not authorized")});
 	});
 }
