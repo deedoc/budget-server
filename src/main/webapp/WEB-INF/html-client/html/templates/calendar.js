@@ -23,28 +23,10 @@
 				</thead>
 				<tbody data-bind="foreach: weeks">
 					<tr data-bind="foreach: days">
-						<td style="padding:4px; width:60px; height:80px;" data-bind="style:{opacity: isAnotherMonth() ? '0.5' : '1', border: isToday() ? '2px dashed black' : ''}">
-							<div style="width:100%; height: 100%; font-size:24px; opacity: 0.8;" data-bind="text: date().format('DD')"></div>
-							
-							<div style="text-align: right; font-size:20px;" data-bind="click: toggleDetailsVisibility, text: sum() != 0 ? sum() : '&nbsp;', attr: {'class': sum() > 0 ? 'text-success' : sum() == 0 ? '' : 'text-error'}"></div>
-							
-							
-							<div class="btn-toolbar">
-								<div class="btn-group">
-									<a class="btn btn-mini" href="#" data-bind="click: addTransaction"><i class="icon-plus-sign"></i></a>
-								</div>
-							</div>
-							
-							<div data-bind="visible: detailsVisible">
-								<table style="width: 100%">
-									<tbody data-bind="foreach: transactions">
-										<tr data-bind="attr: {'class': value > 0 ? 'text-success' : value == 0 ? '' : 'text-error'}">
-											<td data-bind="text: name" />
-											<td data-bind="text: value" />
-											<td><button class="btn btn-mini" type="button" data-bind="visible: true, click: function(){$parent.removeTransaction($data)}"><i class="icon-minus-sign"></i></button></td>
-										</tr>
-									</tbody>
-								</table>
+						<td style="padding:4px; width:60px; height:80px;" data-bind="click: select, style:{opacity: isAnotherMonth() ? '0.5' : '1', border: isToday() ? '2px dashed black' : ''}">
+							<div>
+								<div data-bind="text: date().format('DD')" style="opacity:0.2; overflow:hidden; font-size:60px; line-height:normal; position: absolute; z-index:100" />								
+								<span style="font-size: 20px; margin-left: 3px;" data-bind="text: sum() != 0 ? sum() : '', css: {'text-success': sum() > 0, 'text-error': sum() < 0}"></span>
 							</div>
 						</td>
 					</tr>
@@ -56,3 +38,9 @@
 		</td>
 	</tr>	
 </table>
+<div style="width:100%">
+	<span data-bind="text: selectedDay() && selectedDay().dateKey()" />
+	<ul data-bind="foreach: selectedDay() && selectedDay().transactions()">
+		<li data-bind="text: name + ' ' + value, css: {'text-success': value > 0, 'text-error': value < 0}" />
+	</ul>
+</div>

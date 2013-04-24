@@ -1,6 +1,11 @@
 function Day(parentCalendar){
 	var self = this;
 
+	this.select = function(a,b,c){
+		console.log(this.dateKey());
+		self.parentCalendar.selectedDay(this);
+	}
+
 	this.parentCalendar = parentCalendar;
 	this.date = ko.observable(moment());
 	this.dateKey = ko.computed(function(){
@@ -17,8 +22,8 @@ function Day(parentCalendar){
 
 	this.transactions = ko.observableArray();
 	this.loadTransactions = function(){
+		self.transactions([]);
 		serv.transaction.findByDate(self.dateKey(), function(data){
-			self.transactions([]);
 			data.forEach(function(item){
 				self.transactions.push(item);
 			});

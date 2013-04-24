@@ -1,6 +1,8 @@
 function Calendar(){
 	var self = this;
 
+	this.selectedDay = ko.observable();
+
 	this.changeMonth = function(d){
 		d.date(1).day(1);
 		this.weeks.forEach(function(week){
